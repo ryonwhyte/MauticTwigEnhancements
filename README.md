@@ -182,34 +182,43 @@ When sending emails via Mautic API, pass tokens in your payload:
 
 ## GrapeJS / MJML Usage
 
-When using the GrapeJS email builder (Mautic's default), you can write Twig directly. The plugin automatically handles the HTML entity conversion that GrapeJS applies.
+When using the GrapeJS email builder (Mautic's default), you need to wrap Twig **control structures** in `<mj-raw>` tags to preserve them during MJML compilation.
 
-### What the plugin fixes automatically
+### What needs `<mj-raw>` wrapping
 
-GrapeJS converts `<` and `>` to `&lt;` and `&gt;`. Without this plugin, you'd need workarounds:
-
-```html
-<!-- Old workaround (NOT needed with this plugin) -->
-<mj-raw><!-- {% if count > 10 %} --></mj-raw>
-
-<!-- With this plugin, just write normally -->
-{% if count > 10 %}
-```
+| Syntax | Needs `<mj-raw>`? | Example |
+|--------|-------------------|---------|
+| `{% if %}` | Yes | `<mj-raw>{% if x %}</mj-raw>` |
+| `{% endif %}` | Yes | `<mj-raw>{% endif %}</mj-raw>` |
+| `{% for %}` | Yes | `<mj-raw>{% for item in items %}</mj-raw>` |
+| `{% endfor %}` | Yes | `<mj-raw>{% endfor %}</mj-raw>` |
+| `{{ variable }}` | No | Works inside `<mj-text>` directly |
 
 ### MJML Template Example
 
 ```html
-<!-- Conditional section in MJML -->
-{% if discount is defined and discount %}
+<!-- Conditional section - wrap control tags in mj-raw -->
+<mj-raw>{% if discount is defined and discount %}</mj-raw>
 <mj-section>
   <mj-column>
     <mj-text>You saved {{ discount }}!</mj-text>
   </mj-column>
 </mj-section>
-{% endif %}
+<mj-raw>{% endif %}</mj-raw>
 ```
 
-No `<mj-raw>` wrappers needed!
+### What the plugin fixes automatically
+
+GrapeJS converts `<` and `>` to `&lt;` and `&gt;`. The plugin automatically converts these back inside Twig tags, so comparisons work:
+
+```html
+<!-- This works - plugin auto-fixes the > -->
+<mj-raw>{% if count > 10 %}</mj-raw>
+```
+
+**You don't need:**
+- `{% TWIG_BLOCK %}` markers (unlike Advanced Templates Bundle)
+- HTML comment workarounds (`<!-- {% if x > 1 %} -->`)
 
 ## Migrating from Advanced Templates Bundle
 
