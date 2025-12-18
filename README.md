@@ -158,19 +158,19 @@ When sending emails via Mautic API, pass tokens in your payload:
   "email": 1,
   "contact": 123,
   "tokens": {
-    "{order_id}": "ORD-12345",
-    "{date_time}": "2024-01-15 10:30 AM",
-    "{phone_number}": "+1 876 555 1234",
-    "{operator}": "Digicel",
-    "{country}": "Jamaica",
-    "{received_amount}": "J$500.00",
-    "{cost}": "$5.00",
-    "{processing_fee}": "$0.50",
-    "{total}": "$5.50",
-    "{discount}": "$1.00",
-    "{credit_used}": "$2.00",
-    "{receipt_text}": "Thank you for your purchase!",
-    "{items}": [
+    "order_id": "ORD-12345",
+    "date_time": "2024-01-15 10:30 AM",
+    "phone_number": "+1 876 555 1234",
+    "operator": "Digicel",
+    "country": "Jamaica",
+    "received_amount": "J$500.00",
+    "cost": "$5.00",
+    "processing_fee": "$0.50",
+    "total": "$5.50",
+    "discount": "$1.00",
+    "credit_used": "$2.00",
+    "receipt_text": "Thank you for your purchase!",
+    "items": [
       {"name": "Airtime", "price": 5.00},
       {"name": "Data Bundle", "price": 10.00}
     ]
@@ -178,7 +178,7 @@ When sending emails via Mautic API, pass tokens in your payload:
 }
 ```
 
-**Note:** Token keys should include curly braces (`{order_id}`) - the plugin strips them automatically for Twig access.
+**Note:** Token keys work with or without curly braces (`order_id` or `{order_id}`).
 
 ## GrapeJS / MJML Usage
 
