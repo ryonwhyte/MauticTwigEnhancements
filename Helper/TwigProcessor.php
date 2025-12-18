@@ -6,16 +6,46 @@ namespace MauticPlugin\MauticTwigEnhancementsBundle\Helper;
 
 use Psr\Log\LoggerInterface;
 use Twig\Environment;
+use Twig\Loader\ArrayLoader;
 
 class TwigProcessor
 {
     private Environment $twig;
     private LoggerInterface $logger;
+    private ?Environment $lenientTwig = null;
 
     public function __construct(Environment $twig, LoggerInterface $logger)
     {
         $this->twig = $twig;
         $this->logger = $logger;
+    }
+
+    /**
+     * Get a lenient Twig environment with strict_variables disabled.
+     * This allows undefined variables to be handled gracefully.
+     */
+    private function getLenientTwig(): Environment
+    {
+        if ($this->lenientTwig === null) {
+            $this->lenientTwig = new Environment(new ArrayLoader(), [
+                'strict_variables' => false,
+                'autoescape'       => false,
+            ]);
+
+            // Copy extensions from main Twig environment
+            foreach ($this->twig->getExtensions() as $extension) {
+                $name = get_class($extension);
+                if (!$this->lenientTwig->hasExtension($name)) {
+                    try {
+                        $this->lenientTwig->addExtension($extension);
+                    } catch (\Throwable $e) {
+                        // Some extensions may not be re-addable, skip them
+                    }
+                }
+            }
+        }
+
+        return $this->lenientTwig;
     }
 
     /**
@@ -42,7 +72,9 @@ class TwigProcessor
 
         // Render through Twig with error handling
         try {
-            $template = $this->twig->createTemplate($content);
+            // Use lenient Twig environment to allow undefined variables
+            $twig = $this->getLenientTwig();
+            $template = $twig->createTemplate($content);
 
             return $template->render($twigVars);
         } catch (\Throwable $e) {
