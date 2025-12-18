@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" width="72" height="72">
+  <!-- Background circle -->
+  <circle cx="36" cy="36" r="34" fill="#1e8449"/>
+
+  <!-- Twig leaf/branch symbol -->
+  <g fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Main stem -->
+    <path d="M36 52 Q36 36 36 20"/>
+
+    <!-- Left leaves -->
+    <path d="M36 28 Q28 24 22 28"/>
+    <path d="M36 38 Q26 34 20 40"/>
+
+    <!-- Right leaves -->
+    <path d="M36 28 Q44 24 50 28"/>
+    <path d="M36 38 Q46 34 52 40"/>
+  </g>
+
+  <!-- Curly braces representing Twig syntax -->
+  <text x="14" y="62" font-family="monospace" font-size="16" font-weight="bold" fill="#ffffff">&#123;%</text>
+  <text x="46" y="62" font-family="monospace" font-size="16" font-weight="bold" fill="#ffffff">%&#125;</text>
+</svg>

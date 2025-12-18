@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace MauticPlugin\MauticTwigEnhancementsBundle;
 
-use Mautic\IntegrationsBundle\Bundle\AbstractPluginBundle;
+use Mautic\PluginBundle\Bundle\PluginBundleBase;
 
-class MauticTwigEnhancementsBundle extends AbstractPluginBundle
+class MauticTwigEnhancementsBundle extends PluginBundleBase
 {
 }
