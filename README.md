@@ -255,6 +255,26 @@ Example log entry:
 - Ensure folder is named exactly `MauticTwigEnhancementsBundle`
 - Clear cache: `php bin/console cache:clear`
 - Check file permissions (readable by web server)
+- **If cloned as root**: The plugin directory may be owned by root, preventing Mautic from loading it. Fix with:
+  ```bash
+  chown -R www-data:www-data plugins/MauticTwigEnhancementsBundle
+  ```
+  (Replace `www-data` with your web server user if different)
+
+### Verify plugin is active via console
+
+If the plugin doesn't appear in the UI but you want to confirm it's loaded:
+
+```bash
+# Check if services are registered
+php bin/console debug:container | grep -i twig
+
+# Check event listeners
+php bin/console debug:event-dispatcher EmailEvents::EMAIL_ON_SEND
+
+# Check if bundle is loaded
+php bin/console debug:container --parameter=kernel.bundles | grep Twig
+```
 
 ### Twig not processing
 - Verify plugin is installed: **Settings > Plugins**
